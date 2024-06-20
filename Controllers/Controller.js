@@ -15,7 +15,8 @@ class Controller {
 
     static async showRegister(req, res) {
         try {
-            res.render("Register")
+            let error = req.query.error
+            res.render("Register", { error })
         } catch (err) {
             res.send(err)
         }
@@ -36,7 +37,12 @@ class Controller {
             let create = await User.create(req.body)
             res.redirect(`/login`)
         } catch (err) {
-            res.send(err)
+            if (err.name === "SequelizeValidationError") {
+                res.redirect(`/register?error=Choose+role+between+"admin"+or+"user"`)
+            } else {
+                res.send(err)
+            }
+            
         }
     }
 

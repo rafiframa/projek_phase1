@@ -19,7 +19,15 @@ module.exports = (sequelize, DataTypes) => {
     username: DataTypes.STRING,
     email: DataTypes.STRING,
     password: DataTypes.STRING,
-    role: DataTypes.STRING
+    role: {
+      type: DataTypes.STRING,
+      validate: {
+        isAdminOrUser(value) {
+          if (value !== 'admin' && value !== 'user') {
+            throw new Error('Choose between "admin" or "user"');
+          }
+        }
+      }}
   }, {
     sequelize,
     modelName: 'User',
@@ -27,6 +35,7 @@ module.exports = (sequelize, DataTypes) => {
       beforeCreate: user => {
         var salt = bcrypt.genSaltSync(10);
         user.password = bcrypt.hashSync(user.password, salt);
+        
       }
     }
   });
