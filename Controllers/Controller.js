@@ -106,7 +106,7 @@ class Controller {
             let content = req.body.content
             let image;
             if (req.file) {
-                image = `/uploads/${req.file.filename}`;
+                image = `${req.file.filename}`;
             } else {
                 image = null;
             }
